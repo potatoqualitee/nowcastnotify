@@ -91,7 +91,8 @@ BEGIN
 		Write-Verbose "Waiting for runspace to complete"
 		while ($status.IsCompleted -ne $true) { }
 		
-		Write-Verbose "Runspace complete"
+		$date = Get-Date
+		Write-Verbose "Runspace complete at $date"
 		$tempnew = $runspace.EndInvoke($Status)
 		$runspace.Dispose()
 		
@@ -123,14 +124,16 @@ BEGIN
 				{
 					$oldpercent = $script:old.Clinton -replace '\%'
 					$newpercent = $script:new.Clinton -replace '\%'
-					$title = "Clinton edged up by $($newpercent - $oldpercent)%"
+					$edge = [math]::round($newpercent - $oldpercent, 2)
+					$title = "Clinton edged up by $edge%"
 				}
 				
 				if ($script:new.Trump -gt $script:old.Trump)
 				{
 					$oldpercent = $script:old.Trump -replace '\%'
 					$newpercent = $script:new.Trump -replace '\%'
-					$title = "Trump edged up by $($newpercent - $oldpercent)%"
+					$edge = [math]::round($newpercent - $oldpercent, 2)
+					$title = "Trump edged up by $edge%"
 				}
 				
 				Write-Verbose "Showing popup with title $title"
@@ -205,7 +208,7 @@ PROCESS
 				
 				$notifyicon.Text = $script:popuptext
 				$notifyicon.Visible = $true
-				$notifyicon.ShowBalloonTip($null, "538 Nowcast", $script:popuptext, [System.Windows.Forms.ToolTipIcon]"None")
+				$notifyicon.ShowBalloonTip($null, "538 Nowcast - Who will be President?", $script:popuptext, [System.Windows.Forms.ToolTipIcon]"None")
 				
 				$timer = New-Object System.Windows.Forms.Timer
 				$timer.Interval = $Interval*60*1000
