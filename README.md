@@ -27,7 +27,7 @@ Was there a change in percentage in the last 10 minutes? The popup will let you 
 
 ![changepopup](https://github.com/ctrlbold/nowcastnotify/blob/master/screenshots/changepopup.png?raw=true)
 
-Example
+Examples
 --------------
 This is a script so just run it like a script (.\Show-NowCast or .\Show-NowCast.ps1). Note that the PowerShell window will disappear but the PowerShell process will still be running.
 
