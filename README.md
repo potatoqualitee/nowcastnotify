@@ -34,20 +34,20 @@ This is a script so just run it like a script (.\Show-NowCast or .\Show-NowCast.
 
     .\Show-NowCast
 
-Creates a popup to which displays the current election nowcast for the President of the United States. Note that the PowerShell window will disappear.
+The above example creates a popup to which displays the current election nowcast for the President of the United States. Note that the PowerShell window will disappear.
 
 Checks fivethirtyeight.com every 10 minutes and displays a popup if (and only if) there is a change in percentage.
 
 
     .\Show-NowCast -Interval 60
 
-Creates a popup to which displays the current election nowcast for the President of the United States. Note that the PowerShell window will disappear.
+The above example creates a popup to which displays the current election nowcast for the President of the United States. Note that the PowerShell window will disappear.
 
 Checks fivethirtyeight.com every 60 minutes and displays a popup if (and only if) there is a change in percentage.
   
     .\Show-NowCast -Verbose -ShowWindow
 
-Shows what is happening in the background
+The above example keeps the PowerShell window open and shows what is happening in the background
 
 To Quit
 --------------
