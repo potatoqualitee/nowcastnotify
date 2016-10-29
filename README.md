@@ -1,6 +1,8 @@
 # Show-Nowcast
 This command creates a NotifyIcon which displays the current nowcast from Nate Silver/ESPN's [fivethirtyeight.com](https://fivethirtyeight.com)
 
+![538](https://github.com/ctrlbold/nowcastnotify/blob/master/screenshots/538.png?raw=true)
+
 By default, the NotifyIcon will poll fivethirtyeight.com every 10 minutes and displays a popup if (and only if) there is a change in percentage.
 
 You can change the default polling by specifying -Interval (in minutes).
