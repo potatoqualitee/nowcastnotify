@@ -167,69 +167,69 @@ PROCESS
 	
 	# Create a streaming image by streaming the base64 string to a bitmap streamsource
 	$base64 = "iVBORw0KGgoAAAANSUhEUgAAABIAAAAPCAIAAABm5AhFAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuNWWFMmUAAAEnSURBVDhPlZHNasJAEID3UXr1B4ngxVNzMWDjwR6kKPakIh6q0EvFXgIGchZ8hF4KpVAofao2uzO7Wa+duEFNY0iFb5dhZmc+hmVXN0EeL4zlEbfd+19ZKL/bbs+w2Rzb7rzP2+cP9+ndeXy7fng1bUrJPSglIgKAAOBaRwVtOgj0eh2tVmqxkJOJHAyw2y220WCtVRQZISCSTfzD5vva86LlUs3ncjyW/f5fWxbKn+xGqsxueajZTE2ncjSSwyH2etjpgOMkNjo0gPMfzkMhQppHU2mNU4yHqkRio0O/wctlUa+LZhNsG1otaLfRdWk83RTHGdumqmg0UrYw/DbstYnZQLFJmgdpW6l0pFrltZqwrNhvWRTzSuVQOm8rJGW7gIPtYhj7BXRB0Q6rANe7AAAAAElFTkSuQmCC"
-				$bitmap = New-Object System.Windows.Media.Imaging.BitmapImage
-				$bitmap.BeginInit()
-				$bitmap.StreamSource = [System.IO.MemoryStream][System.Convert]::FromBase64String($base64)
-				$bitmap.EndInit()
-				$bitmap.Freeze()
-				
-				# Convert the bitmap into an icon
-				$image = [System.Drawing.Bitmap][System.Drawing.Image]::FromStream($bitmap.StreamSource)
-				$icon = [System.Drawing.Icon]::FromHandle($image.GetHicon())
-				
-				# Create notifyicon, and right-click -> Exit menu
-				$notifyicon = New-Object System.Windows.Forms.NotifyIcon
-				$menuitem = New-Object System.Windows.Forms.MenuItem
-				$menuitem.Text = "Exit"
-				$notifyicon.Icon = $icon
-				
-				$contextmenu = New-Object System.Windows.Forms.ContextMenu
-				$notifyicon.ContextMenu = $contextmenu
-				$notifyicon.contextMenu.MenuItems.AddRange($menuitem)
-				
-				# When Exit is clicked, close everything and kill the PowerShell process
-				$menuitem.add_Click({
-						$notifyicon.Visible = $false
-						Stop-Process $pid
-					})
-				
-				# Show window when the notifyicon is clicked with the left mouse button
-				# Recall that the right mouse button brings up the contextmenu
-				$notifyicon.add_Click({
-						if ($_.Button -eq [Windows.Forms.MouseButtons]::Left)
-						{
-							Start-Process "http://projects.fivethirtyeight.com/2016-election-forecast/"
-						}
-					})
-				
-				$notifyicon.add_BalloonTipClicked({
-						Start-Process "http://projects.fivethirtyeight.com/2016-election-forecast/"
-					})
-				
-				$notifyicon.Text = $script:popuptext
-				$notifyicon.Visible = $true
-				$notifyicon.ShowBalloonTip($null, "538 Nowcast - Who will be President?", $script:popuptext, [System.Windows.Forms.ToolTipIcon]"None")
-				
-				$timer = New-Object System.Windows.Forms.Timer
-				$timer.Interval = $Interval*60*1000
-				$timer.add_Tick({
-						Get-Results
-						$notifyicon.Text = $script:popuptext
-					})
-				
-				if ($ShowWindow -eq $false)
-				{
-					# Make PowerShell Disappear
-					$windowcode = '[DllImport("user32.dll")] public static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);'
-					$asyncwindow = Add-Type -MemberDefinition $windowcode -name Win32ShowWindowAsync -namespace Win32Functions -PassThru
-					$null = $asyncwindow::ShowWindowAsync((Get-Process -Id $pid).MainWindowHandle, 0)
-				}
-				
-				# Force garbage collection just to start slightly lower RAM usage.
-				[System.GC]::Collect()
-				$timer.start()
-				
-				# Create an application context for it to all run within.
-				$appContext = New-Object System.Windows.Forms.ApplicationContext
-				[void][System.Windows.Forms.Application]::Run($appContext)
+	$bitmap = New-Object System.Windows.Media.Imaging.BitmapImage
+	$bitmap.BeginInit()
+	$bitmap.StreamSource = [System.IO.MemoryStream][System.Convert]::FromBase64String($base64)
+	$bitmap.EndInit()
+	$bitmap.Freeze()
+	
+	# Convert the bitmap into an icon
+	$image = [System.Drawing.Bitmap][System.Drawing.Image]::FromStream($bitmap.StreamSource)
+	$icon = [System.Drawing.Icon]::FromHandle($image.GetHicon())
+	
+	# Create notifyicon, and right-click -> Exit menu
+	$notifyicon = New-Object System.Windows.Forms.NotifyIcon
+	$menuitem = New-Object System.Windows.Forms.MenuItem
+	$menuitem.Text = "Exit"
+	$notifyicon.Icon = $icon
+	
+	$contextmenu = New-Object System.Windows.Forms.ContextMenu
+	$notifyicon.ContextMenu = $contextmenu
+	$notifyicon.contextMenu.MenuItems.AddRange($menuitem)
+	
+	# When Exit is clicked, close everything and kill the PowerShell process
+	$menuitem.add_Click({
+			$notifyicon.Visible = $false
+			Stop-Process $pid
+		})
+	
+	# Show window when the notifyicon is clicked with the left mouse button
+	# Recall that the right mouse button brings up the contextmenu
+	$notifyicon.add_Click({
+			if ($_.Button -eq [Windows.Forms.MouseButtons]::Left)
+			{
+				Start-Process "http://projects.fivethirtyeight.com/2016-election-forecast/"
 			}
+		})
+	
+	$notifyicon.add_BalloonTipClicked({
+			Start-Process "http://projects.fivethirtyeight.com/2016-election-forecast/"
+		})
+	
+	$notifyicon.Text = $script:popuptext
+	$notifyicon.Visible = $true
+	$notifyicon.ShowBalloonTip($null, "538 Nowcast - Who will be President?", $script:popuptext, [System.Windows.Forms.ToolTipIcon]"None")
+	
+	$timer = New-Object System.Windows.Forms.Timer
+	$timer.Interval = $Interval * 60 * 1000
+	$timer.add_Tick({
+			Get-Results
+			$notifyicon.Text = $script:popuptext
+		})
+	
+	if ($ShowWindow -eq $false)
+	{
+		# Make PowerShell Disappear
+		$windowcode = '[DllImport("user32.dll")] public static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);'
+		$asyncwindow = Add-Type -MemberDefinition $windowcode -name Win32ShowWindowAsync -namespace Win32Functions -PassThru
+		$null = $asyncwindow::ShowWindowAsync((Get-Process -Id $pid).MainWindowHandle, 0)
+	}
+	
+	# Force garbage collection just to start slightly lower RAM usage.
+	[System.GC]::Collect()
+	$timer.start()
+	
+	# Create an application context for it to all run within.
+	$appContext = New-Object System.Windows.Forms.ApplicationContext
+	[void][System.Windows.Forms.Application]::Run($appContext)
+}
