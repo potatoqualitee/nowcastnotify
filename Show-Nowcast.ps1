@@ -13,9 +13,10 @@ Keep the PowerShell Window open. Use it with Verbose.
 	
 .NOTES 
 Copyright (C) 2016 Chrissy LeMaire
+Version 0.0.3
 
 .LINK
-https://netnerds.net
+https://github.com/ctrlbold/nowcastnotify
 
 .EXAMPLE
 .\Show-NowCast
@@ -49,6 +50,9 @@ BEGIN
 	function New-Runspace
 	{
 		$scriptblock = {
+			
+			#  to prevent errors with Invoke-WebRequest after a few successful times ¯\_(?)_/¯ 
+			[System.GC]::Collect()
 			
 			try
 			{
